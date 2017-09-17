@@ -93,6 +93,14 @@ readcb(struct bufferevent *bev, void *ctx)
 					htons(dst_peer.sin_port), htons(dst_addr.sin_port),
 					htons(src_addr.sin_port), htons(src_peer.sin_port));
 		}
+		char buf[1024];
+		struct evbuffer_iovec vec[1];
+		evbuffer_peek(dst, -1, NULL, vec, 1);
+		if (vec[0].iov_len > 0) {
+			snprintf(buf, vec[0].iov_len+1, "%s", (char*)vec[0].iov_base);
+		}
+		printf("%s\n", buf);
+
 #if 0
 		struct evbuffer *test = evbuffer_new();
 		evbuffer_add_buffer(test, dst);
